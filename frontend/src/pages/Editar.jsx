@@ -1,0 +1,99 @@
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import api from '../services/api';
+
+export default function Editar() {
+  const { id } = useParams();
+  const [form, setForm] = useState({
+    nome: '',
+    tipo: '',
+    data_aquisicao: '',
+    status: '',
+  });
+  const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState('');
+
+  useEffect(() => {
+    const carregar = async () => {
+      const res = await api.get(`/equipamentos/${id}`);
+      const d = res.data;
+      setForm({
+        nome: d.nome,
+        tipo: d.tipo,
+        data_aquisicao: d.data_aquisicao.split('T')[0],
+        status: d.status,
+      });
+    };
+    carregar();
+  }, [id]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    setErro('');
+    setSucesso('');
+
+    if (!form.nome || !form.tipo || !form.data_aquisicao || !form.status) {
+      setErro('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    try {
+      await api.put(`/equipamentos/${id}`, form);
+      setSucesso('Equipamento atualizado com sucesso!');
+    } catch (err) {
+      setErro('Erro ao atualizar. Verifique os dados e tente novamente.');
+    }
+  };
+
+  return (
+    <div style={{ padding: '2rem', maxWidth: '500px', margin: '0 auto' }}>
+      <h1>Editar Equipamento</h1>
+
+      {erro && <p style={{ color: 'red' }}>{erro}</p>}
+      {sucesso && <p style={{ color: 'green' }}>{sucesso}</p>}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <input
+          name="nome"
+          placeholder="Nome do equipamento *"
+          value={form.nome}
+          onChange={handleChange}
+          style={{ padding: '0.5rem' }}
+        />
+
+        <select name="tipo" value={form.tipo} onChange={handleChange} style={{ padding: '0.5rem' }}>
+          <option value="">Selecione o tipo *</option>
+          <option value="Monitor">Monitor</option>
+          <option value="CPU">CPU</option>
+          <option value="Teclado">Teclado</option>
+        </select>
+
+        <input
+          name="data_aquisicao"
+          type="date"
+          value={form.data_aquisicao}
+          onChange={handleChange}
+          style={{ padding: '0.5rem' }}
+        />
+
+        <select name="status" value={form.status} onChange={handleChange} style={{ padding: '0.5rem' }}>
+          <option value="">Selecione o status *</option>
+          <option value="Ativo">Ativo</option>
+          <option value="Manutenção">Manutenção</option>
+        </select>
+
+        <button
+          onClick={handleSubmit}
+          style={{ padding: '0.75rem', background: '#f5a623', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem' }}
+        >
+          Salvar Alterações
+        </button>
+
+        <a href="/" style={{ textAlign: 'center', color: '#0070f3' }}>← Voltar para o Dashboard</a>
+      </div>
+    </div>
+  );
+}

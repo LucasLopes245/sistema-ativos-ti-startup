@@ -42,7 +42,7 @@ export default function Editar() {
     try {
       await api.put(`/equipamentos/${id}`, form);
       setSucesso('Equipamento atualizado com sucesso!');
-    } catch (err) {
+    } catch  {
       setErro('Erro ao atualizar. Verifique os dados e tente novamente.');
     }
   };

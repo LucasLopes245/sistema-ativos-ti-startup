@@ -4,7 +4,7 @@ Sistema web para gerenciamento de equipamentos de TI de laboratórios acadêmico
 
 ---
 
-## 🚀 Tecnologias
+## Tecnologias
 
 - **Backend:** Node.js + Express
 - **Frontend:** React + Vite
@@ -16,19 +16,23 @@ Sistema web para gerenciamento de equipamentos de TI de laboratórios acadêmico
 
 ---
 
-## ✅ Funcionalidades
+## Funcionalidades
 
-- Autenticação com login e token JWT
+- Cadastro e login de usuários com autenticação JWT
 - CRUD completo de equipamentos (Monitor, CPU, Teclado)
 - Filtros por tipo e status
-- Busca por nome
-- Exportação de relatórios em JSON e CSV
+- Busca por nome em tempo real
+- Contador de equipamentos no dashboard
+- Exportação de relatórios em JSON e CSV direto pelo navegador
+- Modal de confirmação ao deletar equipamentos
+- Loading spinner durante carregamento
 - Interface responsiva com identidade visual da UNICEPLAC
+- Botão de logout na navbar
 - Containerização completa com Docker
 
 ---
 
-## 🐳 Rodar com Docker (recomendado)
+## Rodar com Docker (recomendado)
 
 ### Pré-requisitos
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e rodando
@@ -48,21 +52,11 @@ Aguarde os containers subirem e acesse:
 
 ### Criar primeiro usuário
 
-Após subir os containers, registre um usuário via Insomnia/Postman:
-
-```
-POST http://localhost:3000/api/auth/registrar
-Content-Type: application/json
-
-{
-  "email": "admin@teste.com",
-  "senha": "123456"
-}
-```
+Acesse `http://localhost` → clique em **"Cadastre-se"** → crie sua conta → faça login.
 
 ---
 
-## 💻 Rodar localmente (sem Docker)
+## Rodar localmente (sem Docker)
 
 ### Pré-requisitos
 
@@ -138,29 +132,19 @@ npm run dev
 
 Frontend rodando em `http://localhost:5173`
 
----
+### 5. Criar sua conta
 
-## 🔐 Autenticação
-
-Todas as rotas de equipamentos são protegidas por JWT.
-
-**Registrar usuário:**
-```
-POST /api/auth/registrar
-{ "email": "admin@teste.com", "senha": "123456" }
-```
-
-**Login:**
-```
-POST /api/auth/login
-{ "email": "admin@teste.com", "senha": "123456" }
-```
-
-Use o token retornado no header `Authorization: Bearer <token>` para acessar os endpoints protegidos.
+Acesse `http://localhost:5173` → clique em **"Cadastre-se"** → crie sua conta → faça login.
 
 ---
 
-## 📡 Endpoints da API
+## Autenticação
+
+Todas as rotas de equipamentos são protegidas por JWT. O token é gerado no login e enviado automaticamente em todas as requisições.
+
+---
+
+## Endpoints da API
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
@@ -176,8 +160,11 @@ Use o token retornado no header `Authorization: Bearer <token>` para acessar os 
 
 ---
 
-## 📊 Exportação de relatórios
+## Exportação de relatórios
 
+**Pelo navegador:** No dashboard clique nos botões **⬇ JSON** ou **⬇ CSV** para baixar o arquivo diretamente.
+
+**Pelo terminal:**
 ```bash
 cd backend
 npm run exportar:json  # gera equipamentos.json
@@ -186,7 +173,7 @@ npm run exportar:csv   # gera equipamentos.csv
 
 ---
 
-## 🧪 Testes unitários
+## Testes unitários
 
 ```bash
 cd backend
@@ -195,7 +182,7 @@ npm test
 
 ---
 
-## 📁 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 sistema-ativos-ti-startup/
@@ -216,6 +203,7 @@ sistema-ativos-ti-startup/
 │   │   ├── pages/
 │   │   ├── components/
 │   │   └── services/
+│   ├── nginx.conf
 │   └── Dockerfile
 ├── db/
 │   └── init.sql

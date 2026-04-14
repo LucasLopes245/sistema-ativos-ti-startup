@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
-export default function Login() {
-  const [form, setForm] = useState({ email: '', senha: '' });
+export default function Registro() {
+  const [form, setForm] = useState({ email: '', senha: '', confirmar: '' });
   const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -13,16 +14,32 @@ export default function Login() {
 
   const handleSubmit = async () => {
     setErro('');
-    if (!form.email || !form.senha) {
+    setSucesso('');
+
+    if (!form.email || !form.senha || !form.confirmar) {
       setErro('Preencha todos os campos.');
       return;
     }
+
+    if (form.senha !== form.confirmar) {
+      setErro('As senhas não coincidem.');
+      return;
+    }
+
+    if (form.senha.length < 6) {
+      setErro('A senha deve ter no mínimo 6 caracteres.');
+      return;
+    }
+
     try {
-      const res = await api.post('/auth/login', form);
-      localStorage.setItem('token', res.data.token);
-      navigate('/');
+      await api.post('/auth/registrar', {
+        email: form.email,
+        senha: form.senha,
+      });
+      setSucesso('Conta criada com sucesso! Redirecionando...');
+      setTimeout(() => navigate('/login'), 2000);
     } catch {
-      setErro('Email ou senha inválidos.');
+      setErro('Este email já está cadastrado.');
     }
   };
 
@@ -50,12 +67,13 @@ export default function Login() {
             <text x="14" y="22" fontSize="9" fontWeight="bold" fill="white">TI</text>
           </svg>
           <h1 style={{ color: '#134d2a', fontSize: '1.4rem', fontWeight: 700, marginTop: '0.75rem' }}>
-            Ativos de TI
+            Criar sua Conta
           </h1>
           <p style={{ color: '#666', fontSize: '0.85rem' }}>UNICEPLAC — Gestão de Laboratórios</p>
         </div>
 
         {erro && <div className="alert alert-error">{erro}</div>}
+        {sucesso && <div className="alert alert-success">{sucesso}</div>}
 
         <div className="form-group">
           <label>Email</label>
@@ -70,13 +88,25 @@ export default function Login() {
         </div>
 
         <div className="form-group">
-          <label>Senha</label>
+          <label>Crie sua senha</label>
           <input
             className="form-control"
             name="senha"
             type="password"
-            placeholder="••••••••"
+            placeholder="Mínimo 6 caracteres"
             value={form.senha}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Confirme sua senha</label>
+          <input
+            className="form-control"
+            name="confirmar"
+            type="password"
+            placeholder="Repita a senha"
+            value={form.confirmar}
             onChange={handleChange}
           />
         </div>
@@ -86,13 +116,13 @@ export default function Login() {
           className="btn btn-primary"
           style={{ width: '100%', padding: '0.75rem', marginTop: '0.5rem', fontSize: '1rem' }}
         >
-          Entrar
+          Criar Conta
         </button>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: '#666' }}>
-          Não tem conta?{' '}
-          <Link to="/registro" style={{ color: '#1a6b3a', fontWeight: 600 }}>
-            Cadastre-se
+          Já tem conta?{' '}
+          <Link to="/login" style={{ color: '#1a6b3a', fontWeight: 600 }}>
+            Entrar
           </Link>
         </p>
       </div>

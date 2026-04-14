@@ -30,7 +30,7 @@ export default function Cadastro() {
       await api.post('/equipamentos', form);
       setSucesso('Equipamento cadastrado com sucesso!');
       setForm({ nome: '', tipo: '', data_aquisicao: '', status: '' });
-    } catch (err) {
+    } catch  {
       setErro('Erro ao cadastrar. Verifique os dados e tente novamente.');
     }
   };

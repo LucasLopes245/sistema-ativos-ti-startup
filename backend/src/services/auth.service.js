@@ -4,19 +4,34 @@ const usuarioModel = require('../models/usuario.model');
 
 const registrar = async (email, senha) => {
   const existe = await usuarioModel.findByEmail(email);
-  if (existe) throw { status: 400, message: 'Email já cadastrado' };
 
-  const hash = await bcrypt.hash(senha, 10);
+  if (existe) {
+    return { error: 'Email já cadastrado', status: 400 };
+  }
+
+  const hash = await bcrypt.hash(senha, 12);
+
   const usuario = await usuarioModel.create(email, hash);
-  return usuario;
+
+  return { id: usuario.id, email: usuario.email };
 };
 
 const login = async (email, senha) => {
   const usuario = await usuarioModel.findByEmail(email);
-  if (!usuario) throw { status: 401, message: 'Email ou senha inválidos' };
+
+  if (!usuario) {
+    return { error: 'Email ou senha inválidos', status: 401 };
+  }
 
   const senhaValida = await bcrypt.compare(senha, usuario.senha);
-  if (!senhaValida) throw { status: 401, message: 'Email ou senha inválidos' };
+
+  if (!senhaValida) {
+    return { error: 'Email ou senha inválidos', status: 401 };
+  }
+
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET não definido');
+  }
 
   const token = jwt.sign(
     { id: usuario.id, email: usuario.email },

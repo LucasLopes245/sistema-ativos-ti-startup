@@ -7,20 +7,27 @@
     "dev": "nodemon server.js",
     "start": "node server.js",
     "exportar:json": "node src/scripts/exportar.js json",
-    "exportar:csv": "node src/scripts/exportar.js csv"
+    "exportar:csv": "node src/scripts/exportar.js csv",
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "jest": "^30.3.0",
     "nodemon": "^3.1.14"
   }
 }

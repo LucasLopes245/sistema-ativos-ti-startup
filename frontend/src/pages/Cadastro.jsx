@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function Cadastro() {
   const [form, setForm] = useState({
@@ -34,51 +36,66 @@ export default function Cadastro() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '500px', margin: '0 auto' }}>
-      <h1>Cadastrar Equipamento</h1>
+    <>
+      <Navbar />
+      <div className="container">
+        <h1 className="page-title">Cadastrar Equipamento</h1>
 
-      {erro && <p style={{ color: 'red' }}>{erro}</p>}
-      {sucesso && <p style={{ color: 'green' }}>{sucesso}</p>}
+        <div className="card" style={{ maxWidth: '540px' }}>
+          {erro && <div className="alert alert-error">{erro}</div>}
+          {sucesso && <div className="alert alert-success">{sucesso}</div>}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <input
-          name="nome"
-          placeholder="Nome do equipamento *"
-          value={form.nome}
-          onChange={handleChange}
-          style={{ padding: '0.5rem' }}
-        />
+          <div className="form-group">
+            <label>Nome do equipamento *</label>
+            <input
+              className="form-control"
+              name="nome"
+              placeholder="Ex: Monitor Dell 24"
+              value={form.nome}
+              onChange={handleChange}
+            />
+          </div>
 
-        <select name="tipo" value={form.tipo} onChange={handleChange} style={{ padding: '0.5rem' }}>
-          <option value="">Selecione o tipo *</option>
-          <option value="Monitor">Monitor</option>
-          <option value="CPU">CPU</option>
-          <option value="Teclado">Teclado</option>
-        </select>
+          <div className="form-group">
+            <label>Tipo *</label>
+            <select className="form-control" name="tipo" value={form.tipo} onChange={handleChange}>
+              <option value="">Selecione o tipo</option>
+              <option value="Monitor">Monitor</option>
+              <option value="CPU">CPU</option>
+              <option value="Teclado">Teclado</option>
+            </select>
+          </div>
 
-        <input
-          name="data_aquisicao"
-          type="date"
-          value={form.data_aquisicao}
-          onChange={handleChange}
-          style={{ padding: '0.5rem' }}
-        />
+          <div className="form-group">
+            <label>Data de Aquisição *</label>
+            <input
+              className="form-control"
+              name="data_aquisicao"
+              type="date"
+              value={form.data_aquisicao}
+              onChange={handleChange}
+            />
+          </div>
 
-        <select name="status" value={form.status} onChange={handleChange} style={{ padding: '0.5rem' }}>
-          <option value="">Selecione o status *</option>
-          <option value="Ativo">Ativo</option>
-          <option value="Manutenção">Manutenção</option>
-        </select>
+          <div className="form-group">
+            <label>Status *</label>
+            <select className="form-control" name="status" value={form.status} onChange={handleChange}>
+              <option value="">Selecione o status</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Manutenção">Manutenção</option>
+            </select>
+          </div>
 
-        <button
-          onClick={handleSubmit}
-          style={{ padding: '0.75rem', background: '#0070f3', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem' }}
-        >
-          Cadastrar
-        </button>
-
-        <a href="/" style={{ textAlign: 'center', color: '#0070f3' }}>← Voltar para o Dashboard</a>
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+            <button onClick={handleSubmit} className="btn btn-primary" style={{ flex: 1 }}>
+              Cadastrar
+            </button>
+            <Link to="/" className="btn btn-outline" style={{ flex: 1, textAlign: 'center' }}>
+              ← Voltar
+            </Link>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

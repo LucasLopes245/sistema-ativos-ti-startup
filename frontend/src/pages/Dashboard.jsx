@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function Dashboard() {
   const [equipamentos, setEquipamentos] = useState([]);
@@ -31,57 +33,83 @@ export default function Dashboard() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Equipamentos de TI</h1>
-
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-        <input
-          placeholder="Buscar por nome..."
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          style={{ padding: '0.5rem', flex: 1 }}
-        />
-        <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)} style={{ padding: '0.5rem' }}>
-          <option value="">Todos os tipos</option>
-          <option value="Monitor">Monitor</option>
-          <option value="CPU">CPU</option>
-          <option value="Teclado">Teclado</option>
-        </select>
-        <select value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)} style={{ padding: '0.5rem' }}>
-          <option value="">Todos os status</option>
-          <option value="Ativo">Ativo</option>
-          <option value="Manutenção">Manutenção</option>
-        </select>
-        <a href="/cadastro" style={{ padding: '0.5rem 1rem', background: '#0070f3', color: '#fff', textDecoration: 'none', borderRadius: '4px' }}>
-          + Novo Equipamento
-        </a>
+    <>
+      <Navbar />
+      <div className="container">
+        <h1 className="page-title">Equipamentos de TI</h1>
+        <div className="card">
+          <div className="filtros">
+            <input
+              className="form-control"
+              placeholder="Buscar por nome..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              style={{ flex: 1, minWidth: '200px' }}
+            />
+            <select
+              className="form-control"
+              value={filtroTipo}
+              onChange={(e) => setFiltroTipo(e.target.value)}
+            >
+              <option value="">Todos os tipos</option>
+              <option value="Monitor">Monitor</option>
+              <option value="CPU">CPU</option>
+              <option value="Teclado">Teclado</option>
+            </select>
+            <select
+              className="form-control"
+              value={filtroStatus}
+              onChange={(e) => setFiltroStatus(e.target.value)}
+            >
+              <option value="">Todos os status</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Manutenção">Manutenção</option>
+            </select>
+            <Link to="/cadastro" className="btn btn-primary">
+              + Novo Equipamento
+            </Link>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Data Aquisição</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {equipamentosFiltrados.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+                    Nenhum equipamento encontrado.
+                  </td>
+                </tr>
+              ) : (
+                equipamentosFiltrados.map((e) => (
+                  <tr key={e.id}>
+                    <td data-label="Nome">{e.nome}</td>
+                    <td data-label="Tipo">{e.tipo}</td>
+                    <td data-label="Data Aquisição">
+                      {new Date(e.data_aquisicao).toLocaleDateString('pt-BR')}
+                    </td>
+                    <td data-label="Status">
+                      <span className={`badge ${e.status === 'Ativo' ? 'badge-ativo' : 'badge-manutencao'}`}>
+                        {e.status}
+                      </span>
+                    </td>
+                    <td data-label="Ações" style={{ display: 'flex', gap: '0.5rem' }}>
+                      <Link to={`/editar/${e.id}`} className="btn btn-warning">Editar</Link>
+                      <button onClick={() => deletar(e.id)} className="btn btn-danger">Deletar</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ background: '#f0f0f0' }}>
-            <th style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #ddd' }}>Nome</th>
-            <th style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #ddd' }}>Tipo</th>
-            <th style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #ddd' }}>Data Aquisição</th>
-            <th style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #ddd' }}>Status</th>
-            <th style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #ddd' }}>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {equipamentosFiltrados.map((e) => (
-            <tr key={e.id}>
-              <td data-label="Nome" style={{ padding: '0.75rem', border: '1px solid #ddd' }}>{e.nome}</td>
-              <td data-label="Tipo" style={{ padding: '0.75rem', border: '1px solid #ddd' }}>{e.tipo}</td>
-              <td data-label="Data Aquisição" style={{ padding: '0.75rem', border: '1px solid #ddd' }}>{new Date(e.data_aquisicao).toLocaleDateString('pt-BR')}</td>
-              <td data-label="Status" style={{ padding: '0.75rem', border: '1px solid #ddd' }}>{e.status}</td>
-              <td data-label="Ações" style={{ padding: '0.75rem', border: '1px solid #ddd', display: 'flex', gap: '0.5rem' }}>
-                <a href={`/editar/${e.id}`} style={{ padding: '0.25rem 0.75rem', background: '#f5a623', color: '#fff', textDecoration: 'none', borderRadius: '4px' }}>Editar</a>
-                <button onClick={() => deletar(e.id)} style={{ padding: '0.25rem 0.75rem', background: '#e00', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Deletar</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    </>
   );
 }

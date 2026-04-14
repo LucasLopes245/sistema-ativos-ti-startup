@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function Editar() {
   const { id } = useParams();
@@ -34,12 +35,10 @@ export default function Editar() {
   const handleSubmit = async () => {
     setErro('');
     setSucesso('');
-
     if (!form.nome || !form.tipo || !form.data_aquisicao || !form.status) {
       setErro('Preencha todos os campos obrigatórios.');
       return;
     }
-
     try {
       await api.put(`/equipamentos/${id}`, form);
       setSucesso('Equipamento atualizado com sucesso!');
@@ -49,51 +48,60 @@ export default function Editar() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '500px', margin: '0 auto' }}>
-      <h1>Editar Equipamento</h1>
-
-      {erro && <p style={{ color: 'red' }}>{erro}</p>}
-      {sucesso && <p style={{ color: 'green' }}>{sucesso}</p>}
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <input
-          name="nome"
-          placeholder="Nome do equipamento *"
-          value={form.nome}
-          onChange={handleChange}
-          style={{ padding: '0.5rem' }}
-        />
-
-        <select name="tipo" value={form.tipo} onChange={handleChange} style={{ padding: '0.5rem' }}>
-          <option value="">Selecione o tipo *</option>
-          <option value="Monitor">Monitor</option>
-          <option value="CPU">CPU</option>
-          <option value="Teclado">Teclado</option>
-        </select>
-
-        <input
-          name="data_aquisicao"
-          type="date"
-          value={form.data_aquisicao}
-          onChange={handleChange}
-          style={{ padding: '0.5rem' }}
-        />
-
-        <select name="status" value={form.status} onChange={handleChange} style={{ padding: '0.5rem' }}>
-          <option value="">Selecione o status *</option>
-          <option value="Ativo">Ativo</option>
-          <option value="Manutenção">Manutenção</option>
-        </select>
-
-        <button
-          onClick={handleSubmit}
-          style={{ padding: '0.75rem', background: '#f5a623', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem' }}
-        >
-          Salvar Alterações
-        </button>
-
-        <a href="/" style={{ textAlign: 'center', color: '#0070f3' }}>← Voltar para o Dashboard</a>
+    <>
+      <Navbar />
+      <div className="container">
+        <h1 className="page-title">Editar Equipamento</h1>
+        <div className="card" style={{ maxWidth: '540px' }}>
+          {erro && <div className="alert alert-error">{erro}</div>}
+          {sucesso && <div className="alert alert-success">{sucesso}</div>}
+          <div className="form-group">
+            <label>Nome do equipamento *</label>
+            <input
+              className="form-control"
+              name="nome"
+              placeholder="Ex: Monitor Dell 24"
+              value={form.nome}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Tipo *</label>
+            <select className="form-control" name="tipo" value={form.tipo} onChange={handleChange}>
+              <option value="">Selecione o tipo</option>
+              <option value="Monitor">Monitor</option>
+              <option value="CPU">CPU</option>
+              <option value="Teclado">Teclado</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Data de Aquisição *</label>
+            <input
+              className="form-control"
+              name="data_aquisicao"
+              type="date"
+              value={form.data_aquisicao}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Status *</label>
+            <select className="form-control" name="status" value={form.status} onChange={handleChange}>
+              <option value="">Selecione o status</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Manutenção">Manutenção</option>
+            </select>
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+            <button onClick={handleSubmit} className="btn btn-warning" style={{ flex: 1 }}>
+              Salvar Alterações
+            </button>
+            <Link to="/" className="btn btn-outline" style={{ flex: 1, textAlign: 'center' }}>
+              ← Voltar
+            </Link>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

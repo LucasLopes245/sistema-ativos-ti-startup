@@ -1,6 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-logo">
@@ -15,6 +22,27 @@ export default function Navbar() {
           <div className="navbar-subtitle">UNICEPLAC — Gestão de Laboratórios</div>
         </div>
       </Link>
+
+      <div style={{ marginLeft: 'auto' }}>
+        <button
+          onClick={handleLogout}
+          style={{
+            background: 'rgba(255,255,255,0.15)',
+            border: '1px solid rgba(255,255,255,0.4)',
+            color: '#fff',
+            padding: '0.4rem 1rem',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            transition: 'background 0.2s',
+          }}
+          onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
+        >
+          Sair
+        </button>
+      </div>
     </nav>
   );
 }

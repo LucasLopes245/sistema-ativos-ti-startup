@@ -33,13 +33,15 @@ export default function Registro() {
 
     try {
       await api.post('/auth/registrar', {
-        email: form.email,
-        senha: form.senha,
+        email: form.email.trim().toLowerCase(),
+        senha: form.senha
       });
+
       setSucesso('Conta criada com sucesso! Redirecionando...');
       setTimeout(() => navigate('/login'), 2000);
-    } catch {
-      setErro('Este email já está cadastrado.');
+    } catch (err) {
+      const mensagem = err?.response?.data?.erro || err?.response?.data?.error || 'Erro ao cadastrar usuário';
+      setErro(mensagem);
     }
   };
 

@@ -38,7 +38,7 @@ const login = async (req, res, next) => {
 
     const resultado = await authService.login(email, senha);
 
-    res.json(resultado);
+    res.status(200).json(resultado);
   } catch (err) {
     next(err);
   }

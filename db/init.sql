@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS equipamentos (
 
 CREATE TABLE IF NOT EXISTS usuarios (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(100) UNIQUE NOT NULL,
+  email VARCHAR(100) NOT NULL,
   senha VARCHAR(255) NOT NULL
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS usuarios_email_lower_idx 
+ON usuarios (LOWER(email));

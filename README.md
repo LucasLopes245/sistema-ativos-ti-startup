@@ -6,13 +6,15 @@ Sistema web para gerenciamento de equipamentos de TI de laboratórios acadêmico
 
 ## Tecnologias
 
-- **Backend:** Node.js + Express
-- **Frontend:** React + Vite
-- **Banco de Dados:** PostgreSQL
-- **Autenticação:** JWT (JSON Web Token)
-- **Validação:** Zod
-- **Containerização:** Docker + Docker Compose
-- **Testes:** Jest
+| Camada | Tecnologia |
+|---|---|
+| Backend | Node.js + Express |
+| Frontend | React + Vite |
+| Banco de Dados | PostgreSQL |
+| Autenticação | JWT (JSON Web Token) |
+| Validação | Zod |
+| Containerização | Docker + Docker Compose |
+| Testes | Jest |
 
 ---
 
@@ -35,6 +37,7 @@ Sistema web para gerenciamento de equipamentos de TI de laboratórios acadêmico
 ## Rodar com Docker (recomendado)
 
 ### Pré-requisitos
+
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e rodando
 
 ### Passos
@@ -42,21 +45,21 @@ Sistema web para gerenciamento de equipamentos de TI de laboratórios acadêmico
 ```bash
 git clone https://github.com/LucasLopes245/sistema-ativos-ti-startup.git
 cd sistema-ativos-ti-startup
-docker-compose up --build
+docker compose up --build
 ```
 
 Aguarde os containers subirem e acesse:
 
-- **Frontend:** `http://localhost`
-- **API:** `http://localhost:3000`
+- **Frontend (Docker):** http://localhost
+- **API:** http://localhost:3000
 
 ### Criar primeiro usuário
 
-Acesse `http://localhost` → clique em **"Cadastre-se"** → crie sua conta → faça login.
+Acesse o frontend → clique em **"Cadastre-se"** → crie sua conta → faça login.
 
 ---
 
-## Rodar localmente (sem Docker)
+## Rodar Localmente (sem Docker)
 
 ### Pré-requisitos
 
@@ -72,7 +75,7 @@ cd sistema-ativos-ti-startup
 
 ### 2. Configurar o banco de dados
 
-No pgAdmin ou terminal do PostgreSQL, execute:
+No pgAdmin ou terminal do PostgreSQL:
 
 ```sql
 CREATE DATABASE sistema_ativos;
@@ -102,7 +105,7 @@ npm install
 cp .env.example .env
 ```
 
-Edite o `.env` com suas credenciais:
+Edite o arquivo `.env`:
 
 ```env
 PORT=3000
@@ -111,7 +114,7 @@ DB_HOST=localhost
 DB_NAME=sistema_ativos
 DB_PASSWORD=sua_senha
 DB_PORT=5432
-JWT_SECRET=sistema_ativos_chave_2024
+JWT_SECRET=SUBSTITUA_POR_UM_SECRET_FORTE
 ```
 
 Inicie o servidor:
@@ -120,7 +123,7 @@ Inicie o servidor:
 npm run dev
 ```
 
-API rodando em `http://localhost:3000`
+> API rodando em: http://localhost:3000
 
 ### 4. Configurar o Frontend
 
@@ -130,11 +133,11 @@ npm install
 npm run dev
 ```
 
-Frontend rodando em `http://localhost:5173`
+> Frontend (desenvolvimento): http://localhost:5173
 
 ### 5. Criar sua conta
 
-Acesse `http://localhost:5173` → clique em **"Cadastre-se"** → crie sua conta → faça login.
+Acesse o frontend → clique em **"Cadastre-se"** → crie sua conta → faça login.
 
 ---
 
@@ -147,33 +150,34 @@ Todas as rotas de equipamentos são protegidas por JWT. O token é gerado no log
 ## Endpoints da API
 
 | Método | Rota | Descrição |
-|--------|------|-----------|
-| POST | /api/auth/registrar | Registra novo usuário |
-| POST | /api/auth/login | Realiza login e retorna token |
-| GET | /api/equipamentos | Lista todos |
-| GET | /api/equipamentos?tipo=Monitor | Filtra por tipo |
-| GET | /api/equipamentos?status=Ativo | Filtra por status |
-| GET | /api/equipamentos/:id | Busca por ID |
-| POST | /api/equipamentos | Cadastra novo |
-| PUT | /api/equipamentos/:id | Atualiza |
-| DELETE | /api/equipamentos/:id | Remove |
+|---|---|---|
+| `POST` | `/api/auth/registrar` | Registra novo usuário |
+| `POST` | `/api/auth/login` | Realiza login e retorna token |
+| `GET` | `/api/equipamentos` | Lista todos |
+| `GET` | `/api/equipamentos?tipo=Monitor` | Filtra por tipo |
+| `GET` | `/api/equipamentos?status=Ativo` | Filtra por status |
+| `GET` | `/api/equipamentos/:id` | Busca por ID |
+| `POST` | `/api/equipamentos` | Cadastra novo |
+| `PUT` | `/api/equipamentos/:id` | Atualiza |
+| `DELETE` | `/api/equipamentos/:id` | Remove |
 
 ---
 
-## Exportação de relatórios
+## Exportação de Relatórios
 
-**Pelo navegador:** No dashboard clique nos botões **⬇ JSON** ou **⬇ CSV** para baixar o arquivo diretamente.
+**Pelo navegador:** No dashboard, clique nos botões **⬇ JSON** ou **⬇ CSV** para baixar o arquivo.
 
 **Pelo terminal:**
+
 ```bash
 cd backend
-npm run exportar:json  # gera equipamentos.json
-npm run exportar:csv   # gera equipamentos.csv
+npm run exportar:json
+npm run exportar:csv
 ```
 
 ---
 
-## Testes unitários
+## Testes Unitários
 
 ```bash
 cd backend
@@ -182,7 +186,7 @@ npm test
 
 ---
 
-## Estrutura do projeto
+## Estrutura do Projeto
 
 ```
 sistema-ativos-ti-startup/
@@ -210,3 +214,9 @@ sistema-ativos-ti-startup/
 ├── docker-compose.yml
 └── README.md
 ```
+
+---
+
+## Licença
+
+Este projeto foi desenvolvido para fins acadêmicos — **UNICEPLAC**.

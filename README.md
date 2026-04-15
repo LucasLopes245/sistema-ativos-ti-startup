@@ -45,6 +45,31 @@ Sistema web para gerenciamento de equipamentos de TI de laboratórios acadêmico
 ```bash
 git clone https://github.com/LucasLopes245/sistema-ativos-ti-startup.git
 cd sistema-ativos-ti-startup
+```
+
+Antes de subir os containers, configure o arquivo `.env` do backend:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com suas credenciais:
+
+```env
+PORT=3000
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=sistema_ativos
+DB_PASSWORD=sua_senha
+DB_PORT=5432
+JWT_SECRET=SUBSTITUA_POR_UM_SECRET_FORTE
+```
+
+Volte para a raiz e suba os containers:
+
+```bash
+cd ..
 docker compose up --build
 ```
 
